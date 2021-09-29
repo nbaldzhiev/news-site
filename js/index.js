@@ -1,7 +1,14 @@
-fetch('http://api.mediastack.com/v1/news?access_key=6278c9d201a43241f670a2204ec83caa&categories=business&languages=en&limit=100')
+fetch('https://api.pexels.com/v1/search?query=people', {
+    method: 'GET',
+    headers: {
+        'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'
+    }
+}
+)
     .then(response => response.json())
     .then(
         (data) => {
+            console.log(data)
             let articlesWithImages = [];
             for (const article of data.data) {
                 if (article.image) {
