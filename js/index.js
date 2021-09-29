@@ -89,9 +89,13 @@ function setVideoHtml(videoData) {
     document.querySelector('.top-video-content').innerHTML = `
         <a href=${videoData.videos[0].url} target="_blank">
             <img class="top-video-img" src=${videoData.videos[0].image}>
-            <p class="top-video-img-title">${videoData.videos[0].user.name}</p>
         </a>
     `
+    getQuote().then(
+        (data) => {
+            document.querySelector('.top-video-content').innerHTML += `<p class="top-video-img-title">${data.quote}</p>`
+        }
+    )
 }
 
 
