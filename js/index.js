@@ -1,3 +1,5 @@
+const apiKey = '563492ad6f917000010000014065df06dbb24fc08d9c3df9dcd9e597'
+
 function addLoaderHtml() {
     document.querySelector('.top-article-content').innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
     document.querySelector('.top-video-content').innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
@@ -21,7 +23,7 @@ async function getQuote() {
 async function getPhotos(topic) {
     addLoaderHtml();
     const response = await fetch(`https://api.pexels.com/v1/search?query=${topic}&per_page=21`, {
-            method: 'GET', headers: {'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'}
+            method: 'GET', headers: {'Authorization': apiKey}
     });
     const data = response.json();
     return data;
@@ -79,7 +81,7 @@ function setPhotosHtml(photosData) {
 
 async function getVideo(topic) {
     const response = await fetch(`https://api.pexels.com/videos/search?query=${topic}&per_page=1'`, {
-        method: 'GET', headers: {'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'}
+        method: 'GET', headers: {'Authorization': apiKey}
     });
     const data = await response.json();
     return data
