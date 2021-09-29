@@ -1,59 +1,111 @@
-fetch('https://api.pexels.com/v1/search?query=people', {
-    method: 'GET',
-    headers: {
-        'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'
+function addLoaderHtml() {
+    document.querySelector('.top-article-content').innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
+    document.querySelector('.top-video-content').innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
+    for (const element of document.getElementsByClassName('top-row-item')) {
+        element.innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
+    }
+    for (const element of document.getElementsByClassName('bottom-row-item')) {
+        element.innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
+    }
+    for (const element of document.getElementsByClassName('latest-news-item')) {
+        element.innerHTML = `<img class='loading-gif' src='./images/Eclipse-1s-200px.svg'>`;
     }
 }
-)
-    .then(response => response.json())
-    .then(
+
+async function getQuote() {
+    const response = await fetch('https://api.kanye.rest/');
+    const data = response.json();
+    return data;
+}
+
+async function getPhotos(topic) {
+    addLoaderHtml();
+    const response = await fetch(`https://api.pexels.com/v1/search?query=${topic}&per_page=21`, {
+            method: 'GET', headers: {'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'}
+    });
+    const data = response.json();
+    return data;
+}
+
+function setPhotosHtml(photosData) {   
+    document.querySelector('.top-article-content').innerHTML = `
+        <a href=${photosData.photos[0].url} target="_blank">
+            <img class="top-article-img" src=${photosData.photos[0].src.medium}>
+        </a>
+    `
+    getQuote().then(
         (data) => {
-            console.log(data)
-            let articlesWithImages = [];
-            for (const article of data.data) {
-                if (article.image) {
-                    articlesWithImages.push(article);
-                }    
-                if (articlesWithImages.length === 21) {
-                    break;
-                }
-            }
-            document.querySelector('.top-article-content').innerHTML = `
-                <a href=${articlesWithImages[0].url} target="_blank">
-                    <img class="top-article-img" src=${articlesWithImages[0].image}>
-                    <p class="top-article-img-title">${articlesWithImages[0].title}</p>
-                </a>
-            `
-            document.querySelector('.top-video-content').innerHTML = `
-                <a href=${articlesWithImages[1].url} target="_blank">
-                    <img class="top-video-img" src=${articlesWithImages[1].image}>
-                    <p class="top-video-img-title">${articlesWithImages[1].title}</p>
-                </a>
-            `
-            let arrayIndex = 2;
-            for (const element of document.getElementsByClassName('top-row-item')) {
-                element.innerHTML = `
-                    <a href=${articlesWithImages[arrayIndex].url} target="_blank">
-                        <img class="bottom-section-news-article-img top-row-item-img" src=${articlesWithImages[arrayIndex].image}>
-                        <p class="bottom-section-news-article-text">${articlesWithImages[arrayIndex].title}</p>
-                    </a>
-                `
-                arrayIndex += 1;
-            }
-            for (const element of document.getElementsByClassName('bottom-row-item')) {
-                element.innerHTML = `
-                    <a href=${articlesWithImages[arrayIndex].url} target="_blank">
-                        <img class="bottom-section-news-article-img top-row-item-img" src=${articlesWithImages[arrayIndex].image}>
-                        <p class="bottom-section-news-article-text">${articlesWithImages[arrayIndex].title}</p>
-                    </a>
-                    `
-                arrayIndex += 1;
-            }
-            for (const element of document.getElementsByClassName('latest-news-item')) {
-                element.innerHTML = `
-                    <a class="latest-news-link-title" href=${articlesWithImages[arrayIndex].url}>${articlesWithImages[arrayIndex].title}</a>
-                `
-                arrayIndex += 1;
-            }
+            document.querySelector('.top-article-content').innerHTML += `<p class="top-article-img-title">${data.quote}</p>`
         }
     )
+    let arrayIndex = 2;
+    for (const element of document.getElementsByClassName('top-row-item')) {
+        element.innerHTML = `
+            <a href=${photosData.photos[arrayIndex].url} target="_blank">
+                <img class="bottom-section-news-article-img top-row-item-img" src=${photosData.photos[arrayIndex].src.medium}>
+            </a>
+        `
+        getQuote().then(
+            (data) => {
+                element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+            }
+        )
+        arrayIndex += 1;
+    }
+    for (const element of document.getElementsByClassName('bottom-row-item')) {
+        element.innerHTML = `
+            <a href=${photosData.photos[arrayIndex].url} target="_blank">
+                <img class="bottom-section-news-article-img top-row-item-img" src=${photosData.photos[arrayIndex].src.medium}>
+            </a>
+            `
+        getQuote().then(
+            (data) => {
+                element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+            }
+        )
+        arrayIndex += 1;
+    }
+    for (const element of document.getElementsByClassName('latest-news-item')) {
+        element.innerHTML = `
+            <a class="latest-news-link-title" target="_blank" href=${photosData.photos[arrayIndex].url}></a>
+        `
+        getQuote().then(
+            (data) => {element.querySelector('.latest-news-link-title').textContent = data.quote}
+        )
+        arrayIndex += 1;
+    }
+
+}
+
+async function getVideo(topic) {
+    const response = await fetch(`https://api.pexels.com/videos/search?query=${topic}&per_page=1'`, {
+        method: 'GET', headers: {'Authorization': '563492ad6f917000010000011c621c9575fc4697a98bbd4dc0c635bb'}
+    });
+    const data = await response.json();
+    return data
+}
+
+function setVideoHtml(videoData) {
+    document.querySelector('.top-video-content').innerHTML = `
+        <a href=${videoData.videos[0].url} target="_blank">
+            <img class="top-video-img" src=${videoData.videos[0].image}>
+            <p class="top-video-img-title">${videoData.videos[0].user.name}</p>
+        </a>
+    `
+}
+
+
+function setInitialValues() {
+    const inputPlaceholder = document.getElementById('topic-input').getAttribute('placeholder');
+    getPhotos(inputPlaceholder).then(data => setPhotosHtml(data));
+    getVideo(inputPlaceholder).then(data => setVideoHtml(data));
+}
+
+setInitialValues();
+
+document.getElementById('topic-input').addEventListener('keyup', function(event) {
+    if (event.key == 'Enter' || event.keyCode === 3) {
+        getPhotos(event.target.value).then(data => setPhotosHtml(data));
+        getVideo(event.target.value).then(data => setVideoHtml(data));
+    }
+})
