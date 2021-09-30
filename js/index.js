@@ -16,7 +16,7 @@ function addLoaderHtml() {
 
 async function getQuote() {
     const response = await fetch('https://api.kanye.rest/');
-    const data = response.json();
+    const data = await response.json();
     return data;
 }
 
@@ -25,7 +25,7 @@ async function getPhotos(topic) {
     const response = await fetch(`https://api.pexels.com/v1/search?query=${topic}&per_page=21`, {
             method: 'GET', headers: {'Authorization': apiKey}
     });
-    const data = response.json();
+    const data = await response.json();
     return data;
 }
 
@@ -37,7 +37,7 @@ function setPhotosHtml(photosData) {
     `
     getQuote().then(
         (data) => {
-            document.querySelector('.top-article-content').innerHTML += `<p class="top-article-img-title">${data.quote}</p>`
+            document.querySelector(`[href="${photosData.photos[0].url}"]`).innerHTML += `<p class="top-article-img-title">${data.quote}</p>`
         }
     )
     let arrayIndex = 2;
@@ -47,11 +47,6 @@ function setPhotosHtml(photosData) {
                 <img class="bottom-section-news-article-img top-row-item-img" src=${photosData.photos[arrayIndex].src.medium}>
             </a>
         `
-        getQuote().then(
-            (data) => {
-                element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
-            }
-        )
         arrayIndex += 1;
     }
     for (const element of document.getElementsByClassName('bottom-row-item')) {
@@ -60,11 +55,6 @@ function setPhotosHtml(photosData) {
                 <img class="bottom-section-news-article-img top-row-item-img" src=${photosData.photos[arrayIndex].src.medium}>
             </a>
             `
-        getQuote().then(
-            (data) => {
-                element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
-            }
-        )
         arrayIndex += 1;
     }
     for (const element of document.getElementsByClassName('latest-news-item')) {
@@ -93,18 +83,43 @@ function setVideoHtml(videoData) {
             <img class="top-video-img" src=${videoData.videos[0].image}>
         </a>
     `
-    getQuote().then(
-        (data) => {
-            document.querySelector('.top-video-content').innerHTML += `<p class="top-video-img-title">${data.quote}</p>`
-        }
-    )
 }
 
 
 function setInitialValues() {
     const inputPlaceholder = document.getElementById('topic-input').getAttribute('placeholder');
-    getPhotos(inputPlaceholder).then(data => setPhotosHtml(data));
-    getVideo(inputPlaceholder).then(data => setVideoHtml(data));
+    getPhotos(inputPlaceholder).then(
+        (data) => {
+            setPhotosHtml(data);
+            let arrayIndex = 2;
+            for (const element of document.querySelectorAll('.top-row-item > a')) {
+                getQuote().then(
+                    (data) => {
+                        element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+                    }
+                )
+                arrayIndex += 1;
+            }
+            for (const element of document.querySelectorAll('.bottom-row-item > a')) {
+                getQuote().then(
+                    (data) => {
+                        element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+                    }
+                )
+                arrayIndex += 1;
+            }
+        }
+    );
+    getVideo(inputPlaceholder).then(
+        (data) => {
+            setVideoHtml(data);
+            getQuote().then(
+                (data) => {
+                    document.querySelector('.top-video-content > a').innerHTML += `<p class="top-video-img-title">${data.quote}</p>`
+                }
+            )
+        }
+    );
 }
 
 setInitialValues();
