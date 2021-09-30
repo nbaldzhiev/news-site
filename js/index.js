@@ -126,7 +126,37 @@ setInitialValues();
 
 document.getElementById('topic-input').addEventListener('keyup', function(event) {
     if (event.key == 'Enter' || event.keyCode === 3) {
-        getPhotos(event.target.value).then(data => setPhotosHtml(data));
-        getVideo(event.target.value).then(data => setVideoHtml(data));
+        getPhotos(event.target.value).then(
+            (data) => {
+                setPhotosHtml(data);
+                let arrayIndex = 2;
+                for (const element of document.querySelectorAll('.top-row-item > a')) {
+                    getQuote().then(
+                        (data) => {
+                            element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+                        }
+                    )
+                    arrayIndex += 1;
+                }
+                for (const element of document.querySelectorAll('.bottom-row-item > a')) {
+                    getQuote().then(
+                        (data) => {
+                            element.innerHTML += `<p class="bottom-section-news-article-text">${data.quote}</p>`
+                        }
+                    )
+                    arrayIndex += 1;
+                }
+            }
+        );
+        getVideo(event.target.value).then(
+            (data) => {
+                setVideoHtml(data);
+                getQuote().then(
+                    (data) => {
+                        document.querySelector('.top-video-content > a').innerHTML += `<p class="top-video-img-title">${data.quote}</p>`
+                    }
+                )
+            }
+        );
     }
 })
