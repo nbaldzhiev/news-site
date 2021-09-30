@@ -35,6 +35,7 @@ label {
     grid-template-columns: 3fr 1fr;
     grid-gap: 2em;
     width: 1200px;
+    height: 1200px;
     margin: 4em auto;
 }
 
@@ -171,7 +172,7 @@ img:hover {
 
 /* TOP ROW ITEM */
 .top-row-item {
-    height: 100%;
+    height: 274px;
     width: 274px;
     position: relative;
 }
@@ -180,6 +181,8 @@ img:hover {
 /* BOTTOM SECTION ROW */
 .bottom-row-item {
     border-top: 1px solid #6f7780;
+    height: 274px;
+    width: 274px;
 }
 
 .bottom-row-item img {
@@ -197,7 +200,7 @@ img:hover {
 }
 
 .right-pane-content {
-    height: 100%;
+    height: 1100px;
     display: grid;
     grid-template-rows: repeat(13, 1fr);
     grid-gap: 1em;
