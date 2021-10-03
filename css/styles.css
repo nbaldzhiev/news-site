@@ -283,4 +283,14 @@ img:hover {
     .latest-news-item {
         height: 60px;
     }
+    .top-row-content > .top-row-item:nth-child(2),
+    .top-row-content > .top-row-item:last-child {
+        border-top: 1px solid #6f7780;
+        width: 380px;
+        padding-top: .5em;
+    }
+    .top-row-content > .top-row-item:nth-child(2) > img,
+    .top-row-content > .top-row-item:last-child > img {
+        margin-top: 0.5em;
+    }
 }
