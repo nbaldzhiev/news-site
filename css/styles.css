@@ -293,4 +293,7 @@ img:hover {
     .top-row-content > .top-row-item:last-child > img {
         margin-top: 0.5em;
     }
+    .loading-gif {
+        display: block;
+    }
 }
