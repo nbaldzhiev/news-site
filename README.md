@@ -1,6 +1,6 @@
 # News Layout Website
 
-A simple website to practice HTML, CSS, and vanilla JavaScript, and a bit more complex layouts. The website's sole purpose is to practice FE development.
+A simple website, hosted on [GitHub Pages](https://nbaldzhiev.github.io/news-site/), to practice HTML, CSS, and vanilla JavaScript, and a bit more complex layouts. The website's sole purpose is to practice FE development.
 
 ## Description
 
@@ -17,3 +17,8 @@ load all img elements with beer photographs.
 
 The website is somewhat responsive with a single breakpoint at max-width 768px to allow for better rendering on smartphones.
 The CSS code is very chaotic, but, again, this is just a purely educational project.
+
+## Important about Pexels API
+
+The Pexels API is not completely free and it has a limit of 500 requests a month per API key. So, at some point, this website can actually not load any
+images which would mean that the montly requests limit has been reached.
