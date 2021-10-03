@@ -20,5 +20,5 @@ The CSS code is very chaotic, but, again, this is just a purely educational proj
 
 ## Important about Pexels API
 
-The Pexels API is not completely free and it has a limit of 500 requests a month per API key. So, at some point, this website can actually not load any
+The Pexels API is not completely free and it has a limit of 500 requests a month per API key. So, at some point, this website could actually stop loading any
 images which would mean that the montly requests limit has been reached.
